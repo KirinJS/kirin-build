@@ -1,7 +1,8 @@
 "use strict";
 var tap = require("tap"),
     test = tap.test,
-    plan = tap.plan;
+    plan = tap.plan,
+    _ = require("underscore");
     
 /*
   ======== A Handy Little Tap Reference ========
@@ -158,6 +159,24 @@ test("packageCrawl with extension aliases", function (t) {
     // we're using ios here, so we can include this one we don't use for other platforms. 
     // (we've tested for non-inclusion above)
     t.equal(m.files["lib/my-module-excluded.js"], "lib/my-module-excluded.ios.js");
+    
+    t.end();
+});
+
+test("recursiveDiscover and packageCrawl", function (t) {
+    var packages = crawler.discover(__dirname);
+    crawler.crawl(packages, {
+        platform: "android",
+        buildType: "dev"
+    });
+    
+    t.ok(packages);
+    t.ok(!_.isEmpty(packages));
+    
+    _.each(packages, function (i, key) {
+        t.ok(packages[key].files);
+        t.ok(!_.isEmpty(packages[key].files));
+    });
     
     t.end();
 });
