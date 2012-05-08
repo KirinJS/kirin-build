@@ -23,9 +23,10 @@ var argv = optimist
         desc: "The platform which files are going to be checked",
         "default": "dev"
     })
-    .option('noDependencies', {
-        alias: "n",
-        desc: "Don't lint dependencies",
+    .option('all', {
+        alias: "a",
+        desc: "Lint all dependent modules, using the nearest .jshintrc file available.\n" +
+            "Default is to only lint modules with a .jshintrc in the root of the directory.",
         boolean: true, 
         "default": false
     })
