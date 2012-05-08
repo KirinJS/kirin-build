@@ -133,6 +133,8 @@ test("packageCrawl with directories", function (t) {
     t.equal(m.files["lib/my-module-platform-class-match.js"], "lib/my-module-platform-class-match.webview.js");
     t.equal(m.files["lib/environment.js"], "lib/environment.prod.js");
     
+    t.ok(!m.files["test/" + __filename], "test/" + __filename);
+    
     t.end();
 });
 

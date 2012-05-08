@@ -15,10 +15,10 @@ var argv = {
         platform: "android",
         buildType: "dev"
     };
-var packages = require("../lib/package-crawler").discoverDeep(__dirname, argv);
-
+var packages = crawler.discoverDeep(__dirname, argv);
+var rootPackageName = crawler.rootPackageName;
 test("Common root of all packages is obvious", function (t) {
-    var bom = new Bom(packages),
+    var bom = new Bom(packages, rootPackageName, argv),
         root = bom.getRoot();
     
     t.ok(root);
@@ -53,7 +53,7 @@ test("Copy package plan", function (t) {
 test("Aliases plan", function (t) {
     
     var myPackages = crawler.discoverDeep(testPackage, argv),
-        bom = new Bom(myPackages),
+        bom = new Bom(myPackages, crawler.rootPackageName, argv),
         package_ = myPackages['kirin-build-test-package'];
     t.ok(package_);
     
@@ -65,7 +65,7 @@ test("Aliases plan", function (t) {
 
 test("Plan all", function (t) {
     var packages = crawler.discoverDeep(__dirname, argv),
-        bom = new Bom(packages);
+        bom = new Bom(packages, crawler.rootPackageName, argv);
     
     bom.prepare("/tmp");
     
@@ -79,11 +79,30 @@ test("Plan all", function (t) {
 
 test("Perform copy", function (t) {
     var packages = crawler.discoverDeep(__dirname, argv),
-    bom = new Bom(packages);
+    bom = new Bom(packages, crawler.rootPackageName, argv);
     
     bom.prepare("/tmp/my-new-project");
     
     bom.performCopy();
+    
+    t.end();
+});
+
+test("Perform browserify", function (t) {
+    
+    var packages = crawler.discoverDeep(path.join(__dirname, "browerify-me"), argv, {
+        name: "hello-world",
+        kirin: {
+            dependencies: ["underscore"],
+            directories: ["lib"]
+        }
+    }),
+    bom = new Bom(packages, crawler.rootPackageName, argv);
+    
+    bom.prepare("/tmp/hello-world-browserify");
+    
+    bom.performCopy();
+    bom.performBrowserify();
     
     t.end();
 });
