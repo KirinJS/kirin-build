@@ -1,0 +1,51 @@
+{
+  "name": "kirin-build",
+  "description": "Command line tools to build device specific variants for client side webapps.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/kirinjs/kirin-build",
+  "author": [
+    {
+      "name": "James Hugman",
+      "email": "james@futureplatforms.com",
+      "url": "http://futureplatforms.com"
+    },
+    {
+      "name": "James Hugman",
+      "email": "james@hugman.tv",
+      "url": "https://hugman.posterous.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kirinjs/kirin-build.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kirinjs/kirin-build/issues"
+  },
+  "licenses": [
+    {
+      "type": "APACHE",
+      "url": "git://github.com/kirinjs/kirin-build/blob/master/LICENSE"
+    }
+  ],
+  "bin": {
+     "kirin-build-lint": "./bin/kirin-lint.js"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "test": "tap test/*test.js"
+  },
+  "dependencies": {
+    "resolve": ">= 0.2.2",
+    "optimist": ">= 0.3.4",
+    "underscore": ">= 1.3.3",
+    "findit": ">= 0.1.2",
+    "jshint": "*"
+  },
+  "devDependencies": {
+    "tap": ">= 0.2.4"
+  },
+  "keywords": []
+}
