@@ -44,7 +44,8 @@
     "findit": ">= 0.1.2",
     "jshint": "*",
     "commondir": "*", 
-    "mkdirp": ">= 0.3.2"
+    "mkdirp": ">= 0.3.2",
+    "browserify": "git://github.com/jhugman/node-browserify.git"
   },
   "devDependencies": {
     "tap": ">= 0.2.4"
