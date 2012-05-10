@@ -5,37 +5,38 @@ var tap = require("tap"),
     path = require("path"),
     _ = require("underscore");
 
-var lintAll = require("../lib/lint-all"),
-    crawler = require("../lib/package-crawler");
-
 var argv = { 
         platform: "android", 
         buildType: "dev" 
-    };
+};
+
+var linter = require("../lib/fileset-linter").argv(argv),
+    nodeModules = require("../lib/node-modules").argv(argv);
+
 
 var testPackageLocation = path.join(__dirname, "test-package");
-var packages = crawler.discover(testPackageLocation, {
+var packages = nodeModules.module(testPackageLocation, {
     name: "kirin-build-test-package",
     kirin: {
         dependencies: ["underscore"]
     }
-});
-crawler.crawl(packages, argv);
+}).collectAll();
 
-var kirinBuildPackages = crawler.discover(__dirname, {
+
+var kirinBuildPackages = nodeModules.module(__dirname, {
     name: "kirin-build",
     kirin: {
         dependencies: ["underscore"]
     }
-});
-crawler.crawl(kirinBuildPackages, argv);
+}).collectAll();
+
  
 packages = _.extend(kirinBuildPackages, packages);
 
 test("lint a single package with dry run", function (t) {
     argv.dryRun = true;
     
-    var errors = lintAll.lintPackage(packages['kirin-build-test-package'], argv);
+    var errors = linter._lintPackage(packages['kirin-build-test-package']);
     
     t.ok(!errors);
     
@@ -47,25 +48,25 @@ test("lint a single package", function (t) {
     var package_ = packages['kirin-build'];
     t.ok(package_);
     
-    var errors = lintAll.lintPackage(package_, argv, {});
+    var errors = linter._lintPackage(package_, {});
     
     // it's not empty because we've not told jshint we're using node.
     console.dir(errors);
     t.ok(!_.isEmpty(errors));
     
     // now we're using the .jshintrc file.
-    errors = lintAll.lintPackage(package_, argv);
+    errors = linter._lintPackage(package_);
     t.ok(!errors);
     t.end();
 });
 
 test("lint a single file", function (t) {
     var errors;
-    errors = lintAll.lintFile(__filename);
+    errors = linter._lintFile(__filename);
     t.ok(errors);
     t.ok(!_.isEmpty(errors));
     
-    errors = lintAll.lintFile(__filename, {node: true});
+    errors = linter._lintFile(__filename, {node: true});
     t.ok(!errors);
     
     t.end();
@@ -73,22 +74,14 @@ test("lint a single file", function (t) {
 
 test("lint a string", function (t) {
     var errors;
-    errors = lintAll.lintString(["var a = 1;", "a = a + 1;"]);
+    errors = linter._lintString(["var a = 1;", "a = a + 1;"]);
     t.ok(_.isEmpty(errors));
     
-    errors = lintAll.lintString(["var a = 1;", "eval('a + 1');"]);
+    errors = linter._lintString(["var a = 1;", "eval('a + 1');"]);
     t.equal(errors.length, 1);
     
-    errors = lintAll.lintString(["b = 1"]);
+    errors = linter._lintString(["b = 1"]);
     t.equal(errors.length, 1);
     
-    t.end();
-});
-
-test("display errors", function (t) {
-    var errors = lintAll.lint(packages, {}, {});
-    // there should be if we don't tell jshint that we're using node.
-    t.ok(errors);
-    lintAll.display(errors);
     t.end();
 });

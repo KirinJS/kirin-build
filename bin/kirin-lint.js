@@ -1,18 +1,14 @@
 #!/usr/bin/env node
 var optimist = require("optimist"),
     fs = require("fs"),
-    crawler = require("../lib/package-crawler"),
-    linter = require("../lib/lint-all");
+    _ = require("underscore"),
+    nodeModules = require("../lib/node-modules"),
+    linter = require("../lib/fileset-linter");
 
 
 var argv = optimist
     .usage('Usage: $0 {OPTIONS}')
     .wrap(80)
-    .option('directory', {
-        alias : 'd',
-        desc : 'The directory of files to generate a report',
-        "default": "."
-    })
     .option('platform', {
         alias: "p",
         desc: "The platform which files are going to be checked",
@@ -38,22 +34,20 @@ var argv = optimist
         if (argv.help) {
             throw "";
         }
-        if (argv.directory === ".") {
-            argv.directory = process.cwd();
+        if (argv._.length === 0) {
+            argv.directories = [process.cwd()];
+        } else {
+            argv.directories = argv._;
         }
         
-        if (!fs.existsSync(argv.directory)) {
-            throw "Directory must be a directory that exists";
-        }
     })
     .argv;
 
-var packages = crawler.discover(argv.directory); 
-
-crawler.crawl(packages, argv);
-
-
-
-var packagesWithErrors = linter.lint(packages, argv);
-linter.display(packagesWithErrors);
-linter.judge(packagesWithErrors);
+_.each(argv.directories, function (directory) {
+    if (!fs.existsSync(directory)) {
+        throw "No such directory " + directory;
+    }
+    
+    var m = nodeModules.argv(argv).module(directory);
+    linter.argv(argv).clean(m, true);
+});
