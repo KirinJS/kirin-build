@@ -49,5 +49,5 @@ _.each(argv.directories, function (directory) {
     }
     
     var m = nodeModules.argv(argv).module(directory);
-    linter.argv(argv).clean(m, true);
+    linter.argv(argv).lint(m, true);
 });

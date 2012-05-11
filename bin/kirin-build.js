@@ -2,8 +2,9 @@
 var optimist = require("optimist"),
     fs = require("fs"),
     _ = require("underscore"),
-    crawler = require("../lib/package-crawler"),
-    linter = require("../lib/lint-all");
+    nodeModules = require("../lib/node-modules"),
+    linter = require("../lib/fileset-linter"),
+    packager = require("../lib/final-packager");
 
 
 var argv = optimist
@@ -30,7 +31,12 @@ var argv = optimist
         boolean: true, 
         "default": false
     })
-    .option('directory', {
+    .option('dryRun', {
+        desc: "Report what would happen if this flag wasn't on",
+        boolean: true, 
+        "default": false
+    })
+    .option('jsDirectory', {
         alias: "d",
         desc: "Where the Javascript will be assembled.\n" +
             "Usually, this should be platform specific"
@@ -48,28 +54,33 @@ var argv = optimist
             throw new Error("Must specify a platform");
         }
         
-        if (!argv.directory) {
-            throw new Error("Must specify a directory");
-        }
+        
         
     })
     .argv;
-var src = process.cwd();
-var packages = crawler.discoverDeep(src, argv); 
-if (!argv.noLint) {
-    var packagesWithErrors = linter.lint(packages, argv);
-    linter.display(packagesWithErrors);
-    linter.judge(packagesWithErrors);
+var directory = argv.src || argv._[0] || process.cwd();
+
+if (!directory) {
+    throw new Error("Must specify a directory");
 }
 
-var Bom = require("../lib/package-aggregator").Bom,
-    bom = new Bom(packages, crawler.rootPackageName, argv);
+if (!fs.existsSync(directory)) {
+    throw "No such directory " + directory;
+}
 
-var bundle = bom.performBrowserify();
+var nodeModule = nodeModules.argv(argv).module(directory).crawlAll();
+if (!argv.noLint) {
+    linter.argv(argv).lint(nodeModule, true);
+}
 
-var Packet = require("../lib/kirin-packager").Packet,
-    packet = new Packet(bundle, bom, argv);
+var buildUtils;
+try {
+    buildUtils = require("../lib/build-utils-" + argv.platform).create(argv, nodeModule);
+} catch (e) {
+    // noop
+}
 
-packet.assemble();
+packager.argv(argv).createJavascriptPackage(buildUtils, nodeModule);
+
 
 
