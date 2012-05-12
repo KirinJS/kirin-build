@@ -41,6 +41,9 @@ var argv = optimist
         desc: "Where the Javascript will be assembled.\n" +
             "Usually, this should be platform specific"
     })
+    .option('debug', {
+        desc: "Show your working"
+    })
     .option('help', {
         alias: "?",
         desc: "Display this message"
@@ -74,13 +77,9 @@ if (!argv.noLint) {
 }
 
 var buildUtils;
-try {
-    buildUtils = require("../lib/build-utils-" + argv.platform).create(argv, nodeModule);
-} catch (e) {
-    // noop
-}
-
+buildUtils = require("../lib/build-utils-" + argv.platform).create(argv, nodeModule);
 packager.argv(argv).createJavascriptPackage(buildUtils, nodeModule);
+
 
 
 
