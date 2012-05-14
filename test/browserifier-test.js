@@ -78,7 +78,6 @@ test("browserify to disk", function (t) {
     var fileset = browserifier.browserifyBundleToDisk(bundle, myModule.name);
     
     require("../lib/fs-helper").writeFileSync("generated-bundle.js", bundle);
-    //console.log(bundle);
     
     console.dir(fileset.files());
     
