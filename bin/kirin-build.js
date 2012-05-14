@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 var optimist = require("optimist"),
     fs = require("fs"),
-    _ = require("underscore"),
-    nodeModules = require("../lib/node-modules"),
-    linter = require("../lib/fileset-linter"),
-    packager = require("../lib/final-packager");
+    _ = require("underscore");
 
 
 var argv = optimist
@@ -19,18 +16,28 @@ var argv = optimist
         desc: "The platform which files are going to be checked",
         "default": "dev"
     })
+    .option('native', {
+        desc: "Compile the native application too",
+        boolean: false, 
+        "default": false
+    })
+    .option('target', {
+        desc: "Use the build.${target} commands from package.json"
+    })
+    .option('noDeps', {
+        desc: "Don't native compile dependencies too. This is helpful when the app shares dependencies."
+    })
+    .option('noJavascript', {
+        desc: "Don't package the javascript. This is useful for compiling native projects",
+        boolean: false, 
+        "default": false
+    })
     .option('noLint', {
         desc: "Don't lint any thing if this option is set",
         boolean: false, 
         "default": false
     })
-    .option('lintAll', {
-        alias: "a",
-        desc: "Lint all dependent modules, using the nearest .jshintrc file available.\n" +
-            "Default is to only lint modules with a .jshintrc in the root of the directory.",
-        boolean: true, 
-        "default": false
-    })
+    
     .option('dryRun', {
         desc: "Report what would happen if this flag wasn't on",
         boolean: true, 
@@ -76,15 +83,38 @@ if (!fs.existsSync(directory)) {
     throw "No such directory " + directory;
 }
 
-var nodeModule = nodeModules.argv(argv).module(directory).crawlAll();
-if (!argv.noLint) {
-    linter.argv(argv).lint(nodeModule, true);
+if (argv.buildType === "none") {
+    return;
 }
 
-var buildUtils;
-buildUtils = require("../lib/build-utils-" + argv.platform).create(argv, nodeModule);
-packager.argv(argv).createJavascriptPackage(buildUtils, nodeModule);
+var nodeModules = require("../lib/node-modules").argv(argv),
+    linter = require("../lib/fileset-linter").argv(argv),
+    packager = require("../lib/final-packager").argv(argv);
+    
+var buildUtils, platformSpecificBuildUtils;
+var nodeModule = nodeModules.argv(argv).module(directory).crawlAll();
 
+try {
+    platformSpecificBuildUtils = require("../lib/build-utils-" + argv.platform);
+} catch (e) {
+    platformSpecificBuildUtils = require("../lib/build-utils");
+}
+buildUtils = platformSpecificBuildUtils.create(argv, nodeModule);
 
+if (!argv.noJavascript) {
+    if (!argv.noLint) {
+        console.log("# linting");
+        linter.argv(argv).lint(nodeModule, true);
+    }
+    packager.createJavascriptPackage(buildUtils, nodeModule);
+}
+
+if (argv.native) { 
+    packager.compileNative(buildUtils, nodeModule, function () {
+        console.log("# done");
+    }, function (err) {
+        console.error(err);
+    });
+}
 
 
