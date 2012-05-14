@@ -39,7 +39,12 @@ var argv = optimist
     .option('jsDirectory', {
         alias: "d",
         desc: "Where the Javascript will be assembled.\n" +
-            "Usually, this should be platform specific"
+            "Usually, this should be platform specific, in the source tree of the native app"
+    })
+    .option('tempDirectory', {
+        desc: "This is where the javascript will be collected before being transformed into the generated-javascript directory.\n" + 
+            "This is useful for debugging."
+        
     })
     .option('debug', {
         desc: "Show your working"
