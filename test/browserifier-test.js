@@ -11,7 +11,8 @@ var argv = {
         javascriptFile: "application.js",
         jsDirectory: "/tmp/test-app/generated-javascript",
         platform: "android",
-        buildType: "dev"
+        buildType: "dev",
+        debug: true
 };
 
 var testPackage = path.join(__dirname, "test-package"),
@@ -67,14 +68,17 @@ test("browserify to disk", function (t) {
             dependencies: ["underscore"],
             directories: ["lib"],
             extensions: {
-                "exported-extension": "./lib/my-extension" 
+                "exported-extension": "./lib/foo-screen" 
             }
         }
-    });
+    }).crawlAll();
     
-    var bundle = browserifier.browserifyToString(myModule.crawlAll());
+    var bundle = browserifier.browserifyToString(myModule);
     
     var fileset = browserifier.browserifyBundleToDisk(bundle, myModule.name);
+    
+    require("../lib/fs-helper").writeFileSync("generated-bundle.js", bundle);
+    //console.log(bundle);
     
     console.dir(fileset.files());
     
