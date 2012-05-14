@@ -35,7 +35,8 @@
     "node": "*"
   },
   "scripts": {
-    "test": "tap test/*test.js"
+    "test": "tap test/*test.js",
+    "install": "bin/install-me.js"
   },
   "dependencies": {
     "resolve": ">= 0.2.2",
