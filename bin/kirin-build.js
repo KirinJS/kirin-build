@@ -103,7 +103,7 @@ buildUtils = platformSpecificBuildUtils.create(argv, nodeModule);
 
 if (!argv.noJavascript) {
     if (!argv.noLint) {
-        console.log("# linting");
+        console.log("# Linting modules that have a .jshintrc file");
         linter.argv(argv).lint(nodeModule, true);
     }
     packager.createJavascriptPackage(buildUtils, nodeModule);
