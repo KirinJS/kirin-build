@@ -3,6 +3,8 @@ var optimist = require("optimist"),
     fs = require("fs"),
     _ = require("underscore");
 
+fs.existsSync = fs.existsSync || require("path").existsSync;
+
 
 var argv = optimist
     .usage('Usage: $0 {OPTIONS}')

@@ -2,7 +2,7 @@
 var fsHelper = require("../lib/fs-helper"),
     path = require("path"),
     fs = require("fs");
-
+fs.existsSync = fs.existsSync || require("path").existsSync;
 // TODO this is unix only atm.
 var binScript = [ "#!/bin/sh",
                   process.execPath + " " + __dirname + "/kirin-build.js $@"
