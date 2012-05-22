@@ -1,0 +1,20 @@
+<html>
+<head>
+<script type="text/javascript">
+function doOnLoad() {
+	var kirin = require("kirin");
+	console.log("Javascript says: iOS webview loaded");
+}
+</script>
+
+<script type="text/javascript" src="modules/browserify-preamble.js"></script>
+<script type="text/javascript" src="modules/path"></script>
+<script type="text/javascript" src="modules/node_modules/package.json"></script>
+<script type="text/javascript" src="modules/node_modules/kirin-build-test-package/package.json"></script>
+<script type="text/javascript" src="modules/node_modules/DummyIDL.js"></script>
+<script type="text/javascript" src="modules/node_modules/kirin-build-test-package/idl/DummyIDL.js"></script>
+
+</head>
+<body onload="doOnLoad()">
+</body>
+</html>

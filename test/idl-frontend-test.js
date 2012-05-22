@@ -2,9 +2,11 @@
 var tap = require("tap"),
     test = tap.test,
     plan = tap.plan,
-    _ = require("underscore");
+    _ = require("underscore"),
+    idlFrontends = require("../lib/idl/idl-frontend");
 
-var Transformer = require("../lib/idl/idl-frontend").Transformer;
+var Transformer = idlFrontends.Transformer,
+    Frontend = idlFrontends.Frontend;
 
 var classes,
     transformer;
@@ -112,7 +114,9 @@ test("Transform screens and modules classes", function (t) {
     
     transformer.transformClasses(idl);
     var classes = transformer.classes;
+    console.dir(_.keys(classes));
     t.ok(classes.MyScreen);
+    t.ok(!classes[undefined]);
     
     var c = classes.MyScreen;
     t.equal(c.namespace, "com.example.kirin.bridge.screens");
@@ -214,3 +218,13 @@ test("Transform bridge types as params", function (t) {
     
     t.end();
 }); 
+
+test("Load from file", function (t) {
+    var frontend = new Frontend(__dirname + "/dummies/DummyIDL.js"),
+        ir = frontend.generateIR();
+    t.ok(ir);
+    t.ok(_.isArray(ir));
+    t.equal(ir.length, 4);
+    
+    t.end();
+});

@@ -5,10 +5,10 @@
     "extensions": {
       "my-extension": "./lib/my-extension.js"
     },
+    "idl": "idl",
     "platforms": {
       "ios": {
-        "instructions": "Link with AddressBookUI to use this extension",
-        "project": "MyApp.xcodeproj",
+        "project": "platforms/ios/MyApp.xcodeproj",
         "build": "xcodebuild -configuration {{configuration}}",
         "test": "xcrun ",
         "sign": ""

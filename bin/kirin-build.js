@@ -91,7 +91,8 @@ if (argv.buildType === "none") {
 
 var nodeModules = require("../lib/node-modules").argv(argv),
     linter = require("../lib/fileset-linter").argv(argv),
-    packager = require("../lib/final-packager").argv(argv);
+    packager = require("../lib/final-packager").argv(argv),
+    idlTranslator = require("../lib/idl/idl-translator").argv(argv);
     
 var buildUtils, platformSpecificBuildUtils;
 var nodeModule = nodeModules.argv(argv).module(directory).crawlAll();
@@ -102,6 +103,8 @@ try {
     platformSpecificBuildUtils = require("../lib/build-utils");
 }
 buildUtils = platformSpecificBuildUtils.create(argv, nodeModule);
+
+new idlTranslator.Translator().translateAll(nodeModule, true);
 
 if (!argv.noJavascript) {
     if (!argv.noLint) {
