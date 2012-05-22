@@ -98,7 +98,7 @@ test("Transform screens and modules classes", function (t) {
                     methods: { 
                         // only methods allowed
                         "do:times:plus": [{ x : "integer" }, { y : "integer" }, { z : "integer" }], // capitalise properly
-                        "displayRequest": [{ reqest: "Request" }]
+                        "setTitle:": [{ title: "string" }]
                     }
                 },
                 "MyScreenPresenter": {
