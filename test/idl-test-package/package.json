@@ -12,6 +12,9 @@
         "build": "xcodebuild -configuration {{configuration}}",
         "test": "xcrun ",
         "sign": ""
+      },
+      "android": {
+        "project": "platforms/android"
       }
     }
   }
