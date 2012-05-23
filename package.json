@@ -29,7 +29,7 @@
     }
   ],
   "bin": {
-     "kirin-build-lint": "./bin/kirin-lint.js"
+     "lint": "./bin/kirin-lint.js"
   },
   "engines": {
     "node": "*"

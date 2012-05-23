@@ -173,7 +173,7 @@ test("Transform super classes", function (t) {
     
     t.equal(classes.MySubDTO.imports.MySuperDTO.name, "MySuperDTO");
     t.equal(classes.MySuperDTO.imports.MyRequest.name, "MyRequest");
-    t.ok(!classes.MyRequest.imports);
+    t.equal(classes.MyRequest.imports.int, "int");
     
     t.end();
 });
@@ -214,7 +214,7 @@ test("Transform bridge types as params", function (t) {
     
     t.equal(classes.Screen.imports.Request.name, "Request");
     t.ok(!classes.Module.imports);
-    t.ok(!classes.Request.imports);
+    t.equal(classes.Request.imports.int, "int");
     
     t.end();
 }); 

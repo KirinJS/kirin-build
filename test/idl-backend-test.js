@@ -25,7 +25,7 @@ function setup() {
             superClass: baseClass,
         
             imports: [
-                      "array", "object", baseClass
+                 "array", "object", baseClass
              ],
         
         
@@ -116,18 +116,19 @@ test("generating declaration", function (t) {
 
 test("generating properties", function (t) {
     setup();
-    t.deepEqual(g.propertyLines(subClass.properties), 
-                [" ",
-                 "/**", 
-                 " * It wasn't supposed to be like this", 
-                 " */",
-                 "@property(readonly) int foo;",
-                 " ",
-                 "@property(readonly) NSDictionary* bar;",
-                 " ",
-                 "@property(readonly) NSArray* baz;",
-                 " ",
-                 "@property(readonly) id<BaseClass> quuz;"]);
+    t.deepEqual(_.filter(g.propertyLines(subClass.properties), function (l) {
+                    return l.indexOf("*") >= 0 || l.indexOf("@property") >=0;
+                }), 
+                [
+                     "/**", 
+                     " * It wasn't supposed to be like this", 
+                     " */",
+                     "@property(readonly) int foo;",
+                     "@property(readonly, retain) NSDictionary* bar;",
+                     "@property(readonly, retain) NSArray* baz;",
+                     "@property(readonly, retain) NSDictionary* quuz;"
+                 ]); 
+    // last line will have id<BaseClass>, but request objects can't handle it
     t.end();
 });
 
