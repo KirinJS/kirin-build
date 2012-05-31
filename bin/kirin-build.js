@@ -103,8 +103,9 @@ try {
     platformSpecificBuildUtils = require("../lib/build-utils");
 }
 buildUtils = platformSpecificBuildUtils.create(argv, nodeModule);
-
 new idlTranslator.Translator().translateAll(nodeModule, true);
+
+
 
 if (!argv.noJavascript) {
     if (!argv.noLint) {

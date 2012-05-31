@@ -31,7 +31,6 @@ test("Full flow", function (t) {
     setup();
     var fileMap = translator.translate(nodeModule);
     t.ok(fileMap);
-    console.dir(fileMap);
-    t.equal(_.size(fileMap), 4);
+    t.equal(_.size(fileMap), 5); // one native one for each file, and one for a module in javascript
     t.end();
 });
