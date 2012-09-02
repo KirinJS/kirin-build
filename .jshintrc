@@ -1,15 +1,6 @@
 {
     "predef": [
-        "jasmine",
-        "spyOn",
-        "it",
-        "console",
-        "describe",
-        "expect",
-        "beforeEach",
-        "waits",
-        "waitsFor",
-        "runs"
+        "console"
     ],
     "node": true,
     "bitwise": true,
@@ -42,6 +33,7 @@
     "laxcomma": false,
     "loopfunc": false,
     "multistr": false,
+    "noempty": false,
     "onecase": true,
     "proto": false,
     "regexdash": false,

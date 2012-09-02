@@ -56,7 +56,8 @@ test("lint a single package", function (t) {
     
     // now we're using the .jshintrc file.
     errors = linter._lintPackage(package_);
-    t.ok(!errors);
+    
+    t.ok(errors);
     t.end();
 });
 
