@@ -46,7 +46,7 @@
     "jshint": "*",
     "commondir": "*", 
     "mkdirp": ">= 0.3.2",
-    "browserify": "git://github.com/jhugman/node-browserify.git"
+    "browserify": "= 1.10.15"
   },
   "devDependencies": {
     "tap": ">= 0.2.4"
