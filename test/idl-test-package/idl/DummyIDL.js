@@ -35,6 +35,28 @@ module.exports = {
                 // no methods allowed
                 status : "integer"
             }
+        },
+        "ValidatedRequest": {
+            role: "request",
+            properties: {
+                myInteger: "integer",
+                myBoolean: "boolean",
+                myOtherBoolean: "boolean",
+                myString: "string"
+            },
+            validation: {
+                dependencies: {
+                    myInteger: ["myBoolean", "myOtherBoolean"]
+                },
+                acceptedForms: [
+                    ["myInteger"],
+                    ["myString", "myOtherBoolean"]
+                ],
+                defaults: {
+                    myString: "Help"
+                }
+            }
+        
         }
     }
 };
