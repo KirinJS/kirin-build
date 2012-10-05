@@ -103,6 +103,7 @@ try {
     platformSpecificBuildUtils = require("../lib/build-utils");
 }
 buildUtils = platformSpecificBuildUtils.create(argv, nodeModule);
+console.log("# Generating files from IDL");
 new idlTranslator.Translator().translateAll(nodeModule, true);
 
 
@@ -112,15 +113,22 @@ if (!argv.noJavascript) {
         console.log("# Linting modules that have a .jshintrc file");
         linter.argv(argv).lint(nodeModule, true);
     }
+    console.log("# Packaging Javascript into " + argv.jsDirectory);
     packager.createJavascriptPackage(buildUtils, nodeModule);
+}
+
+var ending = function () {
+    console.log("# DONE");
 }
 
 if (argv.native) { 
     packager.compileNative(buildUtils, nodeModule, function () {
-        console.log("# done");
+        ending();
     }, function (err) {
         console.error(err);
     });
+} else {
+    ending();
 }
 
 
