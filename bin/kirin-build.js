@@ -120,11 +120,13 @@ new idlTranslator.Translator().translateAll(nodeModule, true);
 
 
 if (!argv.noJavascript) {
+    
     if (!argv.noLint) {
         log("# Linting modules that have a .jshintrc file");
         linter.argv(argv).lint(nodeModule, true);
     }
     log("# Packaging Javascript into " + argv.jsDirectory);
+    nodeModule = nodeModules.argv(argv).module(directory).crawlAll();
     packager.createJavascriptPackage(buildUtils, nodeModule);
 }
 
