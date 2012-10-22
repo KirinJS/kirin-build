@@ -48,12 +48,12 @@ test("browserifyToString one dependencies used", function (t) {
     var myModule = nodeModules.module(testPackage_withDependency, {
         name: "hello-world",
         kirin: {
-            dependencies: ["underscore"],
             directories: ["lib"],
             extensions: {
                 "exported-extension": "./lib/my-extension" 
             }
-        }
+        },
+        dependencies: {"underscore":"*"}
     });
     
     var string = browserifier.browserifyToString(myModule.crawlAll());
@@ -65,12 +65,12 @@ test("browserify to disk", function (t) {
     var myModule = nodeModules.module(testPackage_withDependency, {
         name: "hello-world",
         kirin: {
-            dependencies: ["underscore"],
             directories: ["lib"],
             extensions: {
                 "exported-extension": "./lib/foo-screen" 
             }
-        }
+        },
+        dependencies: {"underscore":"*"}
     }).crawlAll();
     
     var bundle = browserifier.browserifyToString(myModule);

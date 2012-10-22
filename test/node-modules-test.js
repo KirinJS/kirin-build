@@ -29,9 +29,7 @@ test("instantiation", function (t) {
 test("dependency discovery", function (t) {
     var m = nodeModules.module(testPackage, {
         name: "my-root",
-        kirin: {
-            dependencies: ["underscore"]
-        }
+        dependencies: {"underscore": "*"}
     });
     
     var all = m.collectAll();
@@ -46,9 +44,7 @@ test("dependency discovery", function (t) {
 test("crawlAll", function (t) {
     var m = nodeModules.module(testPackage, {
         name: "my-root",
-        kirin: {
-            dependencies: ["underscore"]
-        }
+        dependencies: {"underscore": "*"}
     });
     
     var all = m.collectAll();
