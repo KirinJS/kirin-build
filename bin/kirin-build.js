@@ -11,11 +11,11 @@ var argv = optimist
     .wrap(80)
     .option('platform', {
         alias: "p",
-        desc: "The platform which files are going to be checked"
+        desc: "The platform to package the javascript for. Filename suffix file selection uses this value to choose javascript and resource files. Possible values: ios, android"
     })
     .option('buildType', {
         alias: "b",
-        desc: "The platform which files are going to be checked",
+        desc: "The build type. This governs how the javascript is packaged. Filename suffix file selection uses this value to choose javascript and resource files.  Possible values: dev, qa, prod",
         "default": "dev"
     })
     .option('native', {
